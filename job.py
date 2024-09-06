@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 
 # Define various configs
 hr_levels=["IC5","IC6","IC7"]
-exclude_title="Software Engineer"
+exclude_titles=["Software Engineer", "Scientist", "Research", "Architect"]
 
 # Define the file names
 new_jobs_file = '/appdata/jobs.new.txt'
@@ -54,8 +54,8 @@ if response.status_code == 200:
     # Access the list of jobs from the response
     all_jobs = data.get('operationResult', {}).get('result', {}).get('jobs', [])
 
-    # Exclude the jobs that you don't want (single keyword)
-    jobs = [job for job in all_jobs if exclude_title not in job.get('title', '')]
+    # Exclude the jobs that you don't want
+    jobs = [job for job in all_jobs if not any(exclude in job.get('title', '') for exclude in exclude_titles)]
 
     # Get the total page size we will have to parse
     job_total = data.get('operationResult', {}).get('result', {}).get('totalJobs')
@@ -93,8 +93,8 @@ if total_pages > 1:
             # Access the list of jobs from the response
             all_jobs = data.get('operationResult', {}).get('result', {}).get('jobs', [])
 
-            # Exclude the jobs that you don't want (single keyword)
-            jobs = [job for job in all_jobs if exclude_title not in job.get('title', '')]
+            # Exclude the jobs that you don't want
+            jobs = [job for job in all_jobs if not any(exclude in job.get('title', '') for exclude in exclude_titles)]
 
             # Grab the Job IDs (or handle the data as needed)
             if jobs:
