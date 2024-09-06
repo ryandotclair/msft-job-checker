@@ -1,5 +1,5 @@
 # Purpose
-The default Microsoft career site's job alert feature doesn't take into account IC or M levels. This simple script scrapes all job postings via the public API, filters on the specific IC or M level you're interested in, and alerts you via the Pushover.net service (which has a mobile app) if there's any new job listings.
+The default Microsoft career site's job alert feature doesn't take into account IC or M levels. This simple script scrapes all job postings via the public API, filters on the specific IC and/or M level you're interested in, optionally excludes any keywords in the title, and alerts you via the Pushover.net service (which has a mobile app) if there's any new job listings.
 
 # Requirements
 - [Pushover.net](https://Pushover.net) (30 day free trial, then a one-time $5 charge for lifetime access)
