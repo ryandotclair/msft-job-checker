@@ -16,7 +16,7 @@ The default Microsoft career site's job alert feature doesn't take into account 
   >   - Run `sudo apt install ./libseccomp2_2.5.1-1~bpo10+1_armhf.deb`
 
 # Usage
-To run the script stand-alone, simply run `docker run -it -e APP_TOKEN="<app_token>" -e USER_TOKEN="<user_token>" -v .:/appdata msft-monitor` from a folder you want the two job files to be generated at (jobs.new.txt [what's latest list of jobs] and jobs.txt [list of jobs already known])
+To run the script stand-alone, simply run `docker run -it -e APP_TOKEN="<app_token>" -e USER_TOKEN="<user_token>" -v .:/appdata msft-monitor` from the folder you want the various files that get outputted to live in.
 
   > Note: 
   > - You'll need to plug in Pushover.net's app and user token. The App token is created when you register a new app. The User token is tied to your user.
@@ -25,8 +25,8 @@ To run the script stand-alone, simply run `docker run -it -e APP_TOKEN="<app_tok
 
 # Default Behavior
 - 3 Files get generated from this script:
-  - `jobs.txt` holds the "last run" and is used to compare against the newest job grab
-  - `jobs.new.txt` hold the latest job listing. If there's a job in this file that's not in the jobs.txt file, then that job's URL gets pushed to your phone
+  - `jobs.txt` holds the "previous run" and is used to compare against the newest job grab
+  - `jobs.new.txt` holds the latest job listing. If there's a job in this file that's not in the jobs.txt file, then that job's URL gets pushed to your phone. If a job gets "dropped", it will be noted in the log file but you will not get notified of it.
   - `jobs.log` stores all the logs, and should automatically get pruned if it exceeds 1MB
 - Out of the box this checks for all jobs in the US that are 100% remote and are full time. Lines 38 and 82 in job.py is where you can adjust those specific filters, but I reccomend tweaking `hr_levels` and `exclude_titles` first.
 - On the first run (or when `jobs.txt` doesn't exist), no alert is sent. It's the following runs, when there's a new job posting, that it will alert you. You can check `jobs.txt` file to see all the current jobs out there that meet the criteria.
