@@ -21,7 +21,7 @@ To run the script stand-alone, simply run `docker run -it -e APP_TOKEN="<app_tok
   > Note: 
   > - You'll need to plug in Pushover.net's app and user token. The App token is created when you register a new app. The User token is tied to your user.
   > - Script looks specifically for /appdata folder in the container, and it only works when data persists across runs (read: must use -v)
-  > - I've included a jobs.sh file that you can point contab to (example of it running every hour example on a pi4: `0 * * * * /bin/bash /home/pi/jobs/jobs.sh`)... be sure to update the tokens and the path you want the files to live in. This script also assumes you've done the docker build command on the machine.
+  > - I've included a shell script file (`jobs.sh`) that you can point contab to (example of it running every hour example on a pi4: `0 * * * * /bin/bash /home/pi/jobs/jobs.sh`)... be sure to update the script's tokens and the path you want the files to live in, as well as manually  running it first (`chmod +x jobs.sh && ./jobs.sh`) before pointing cron to it. This script assumes you've done the docker build command on the machine prior to it running.
 
 # Default Behavior
 - 3 Files get generated from this script:
