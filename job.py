@@ -7,6 +7,8 @@ from logging.handlers import RotatingFileHandler
 # Define various configs
 hr_levels=["IC5","IC6","IC7"]
 exclude_titles=["Software Engineer", "Scientist", "Research", "Architect"]
+max_log_size = 1 * 1024 * 1024  # Limit it to 1 MB
+backup_count = 3  # Keep 3 backup files
 
 # Define the file names
 new_jobs_file = '/appdata/jobs.new.txt'
@@ -29,8 +31,6 @@ file_handler.setFormatter(formatter)
 console_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
-max_log_size = 1 * 1024 * 1024  # Limit it to 1 MB
-backup_count = 3  # Keep 3 backup files
 file_handler = RotatingFileHandler(log_path, maxBytes=max_log_size, backupCount=backup_count)
 file_handler.setLevel(logging.DEBUG)
 
