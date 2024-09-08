@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 
 # Define various configs
 hr_levels=["IC5","IC6","IC7"]
-exclude_titles=["Software Engineer", "Scientist", "Research", "Architect"]
+exclude_titles=["Software Engineer", "Scientist", "Research", "Architect", "Product Manager"]
 max_log_size = 1 * 1024 * 1024  # Limit it to 1 MB
 backup_count = 3  # Keep 3 backup files
 
@@ -108,7 +108,6 @@ if total_pages > 1:
         page += 1
 print(f"Total jobs found: {len(job_list)}")
 
-job_monitor=[]
 shorten_jobs={}
 if job_list:
     for job in job_list:
@@ -138,7 +137,6 @@ if job_list:
                 try:
                     if level in qualifications:
                         print(f"Job {job} meets {level} criteria!")
-                        job_monitor.append(job)
                         shorten_jobs[job]=title
                 except ValueError:
                     print(f"Ran into qualifications issue for job {job}, skipping")
@@ -148,12 +146,12 @@ if job_list:
             print(f"Failed to retrieve data. Status code: {response.status_code}")
 
 if shorten_jobs:
-    print(f"Jobs that meet hr level criteria: {len(job_monitor)}")
+    print(f"Jobs that meet hr level criteria: {len(shorten_jobs)}")
     with open(new_jobs_file, 'w') as file:
         for job,title in shorten_jobs.items():
         # Save the job paths to a file
             file.write(f"https://jobs.careers.microsoft.com/global/en/job/{job}, {title}\n")
-    logger.info(f"jobs.new.txt file has been updated with a total of {len(job_monitor)} jobs!")
+    logger.info(f"jobs.new.txt file has been updated with a total of {len(shorten_jobs)} jobs!")
 
     # Read the contents of the files into sets
     with open(new_jobs_file, 'r') as f:
@@ -161,11 +159,11 @@ if shorten_jobs:
 
     # Check if the old jobs file exists
     if not os.path.exists(jobs_file):
-        # If it doesn't exist, create it by copying the new jobs file and "initiate" this script.
+        # If it doesn't exist, create it by copying the new jobs file and "initialize" this script.
         with open(jobs_file, 'w') as f:
             f.write('\n'.join(sorted(new_jobs)))
         logger.info(f"{jobs_file} did not exist, so it was created with the contents of {new_jobs_file}.")
-    else:
+    else:     
         # If the old jobs file exists, read its contents into a set
         with open(jobs_file, 'r') as f:
             jobs = set(f.read().splitlines())
@@ -175,11 +173,13 @@ if shorten_jobs:
             logger.info("No new jobs!")
             # logger.info(f"Total jobs is {len(jobs)}")
         else:
-            # Check for removed job listings
+            # Initiate an empty set to start capturing all the new jobs
+            append_new_jobs=set()
+
+            # Check for removed job listings, used only to notify in logs of it's removal.
             removed_jobs = jobs - new_jobs
             for job in removed_jobs:
                 logger.info(f"Job listing removed! {job}")
-                jobs.remove(job)
 
             # Check for new job listings
             new_listings = new_jobs - jobs
@@ -191,8 +191,8 @@ if shorten_jobs:
                 response = requests.request("POST", url, verify=False)
 
                 logger.info(response.text)
-                jobs.add(job)
+                append_new_jobs.add(job)
 
-            # Update the old jobs file
-            with open(jobs_file, 'w') as f:
-                f.write('\n'.join(sorted(jobs)))
+            # Update the old jobs file with the new jobs
+            with open(jobs_file, 'a') as f:
+                f.write('\n'.join(sorted(append_new_jobs)))
