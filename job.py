@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 # Define various configs
 hr_levels=["IC5","IC6","IC7"]
 exclude_titles=["Software Engineer", "Scientist", "Research", "Architect", "Product Manager"]
-max_log_size = 50 * 1024  # Limit it to 100KB
+max_log_size = 50 * 1024  # Limit it to 50KB
 backup_count = 3  # Keep 3 backup files
 
 # Define the file names
