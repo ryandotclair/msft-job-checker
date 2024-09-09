@@ -151,6 +151,7 @@ if shorten_jobs:
         for job,title in shorten_jobs.items():
         # Save the job paths to a file
             file.write(f"https://jobs.careers.microsoft.com/global/en/job/{job}, {title}\n")
+    
     logger.info(f"jobs.new.txt file has been updated with a total of {len(shorten_jobs)} jobs!")
 
     # Read the contents of the files into sets
@@ -192,7 +193,9 @@ if shorten_jobs:
 
                 logger.info(response.text)
                 append_new_jobs.add(job)
+                print(f"content of job, that's being added to append_new_jobs: {job}")
 
+            print(f"append_new_jobs contents: {append_new_jobs}")
             # Update the old jobs file with the new jobs
             with open(jobs_file, 'a') as f:
-                f.write('\n'.join(sorted(append_new_jobs)))
+                f.write(append_new_jobs)
