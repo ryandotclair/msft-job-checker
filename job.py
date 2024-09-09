@@ -198,4 +198,4 @@ if shorten_jobs:
             print(f"append_new_jobs contents: {append_new_jobs}")
             # Update the old jobs file with the new jobs
             with open(jobs_file, 'a') as f:
-                f.write(append_new_jobs)
+                f.write(str(append_new_jobs))
