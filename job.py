@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler
 # Define various configs
 hr_levels=["IC5","IC6","IC7"]
 exclude_titles=["Software Engineer", "Scientist", "Research", "Architect", "Product Manager"]
-max_log_size = 1 * 1024 * 1024  # Limit it to 1 MB
+max_log_size = 50 * 1024  # Limit it to 100KB
 backup_count = 3  # Keep 3 backup files
 
 # Define the file names
@@ -28,11 +28,12 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter)
+file_handler = RotatingFileHandler(log_path, maxBytes=max_log_size, backupCount=backup_count)
+file_handler.setLevel(logging.INFO)
 console_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
-file_handler = RotatingFileHandler(log_path, maxBytes=max_log_size, backupCount=backup_count)
-file_handler.setLevel(logging.DEBUG)
+
 
 # Default URL is looking at US, remote only, full-time positions, filtered by most recent
 url = f'https://gcsservices.careers.microsoft.com/search/api/v1/search?lc=United%20States&exp=Experienced%20professionals&et=Full-Time&ws=Up%20to%20100%25%20work%20from%20home&l=en_us&pg=1&pgSz=20&o=Recent'
@@ -193,9 +194,6 @@ if shorten_jobs:
 
                 logger.info(response.text)
                 append_new_jobs.add(job)
-
-                print(f"job content: {job}")
-                print(f"job type: {type(job)}")
             
             # Update the old jobs file with the new jobs
             with open(jobs_file, 'a') as f:
