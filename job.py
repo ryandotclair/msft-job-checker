@@ -193,9 +193,10 @@ if shorten_jobs:
 
                 logger.info(response.text)
                 append_new_jobs.add(job)
-                print(f"content of job, that's being added to append_new_jobs: {job}")
 
-            print(f"append_new_jobs contents: {append_new_jobs}")
+                print(f"job content: {job}")
+                print(f"job type: {type(job)}")
+            
             # Update the old jobs file with the new jobs
             with open(jobs_file, 'a') as f:
-                f.write('\n'.join(sorted(append_new_jobs)))
+                f.write('\n'.join(append_new_jobs) + '\n')
